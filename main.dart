@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:manlivetoung/src/auth.dart';
 import 'package:manlivetoung/loginPage.dart';
+import 'package:manlivetoung/src/pages/login.dart';
 
 void main() {
   runApp(const MyApp());
