@@ -4,8 +4,18 @@ import 'package:manlivetoung/src/auth.dart';
 import 'package:manlivetoung/src/pages/login.dart';
 import 'package:manlivetoung/src/pages/register.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
+import 'package:manlivetoung/src/firebase_options.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => UserInfos()),
+  ], child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
