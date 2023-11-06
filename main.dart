@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:manlivetoung/provider/myProvider.dart';
 import 'package:manlivetoung/src/auth.dart';
-import 'package:manlivetoung/loginPage.dart';
 import 'package:manlivetoung/src/pages/login.dart';
+import 'package:manlivetoung/src/pages/register.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => LoginPage(),
+        '/register': (context) => RegisterPage(),
       },
     );
   }
