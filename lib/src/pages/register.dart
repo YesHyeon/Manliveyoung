@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:manlivetoung/src/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -14,27 +17,36 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController _nicknameController = TextEditingController();
   FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-  void _signup() async {
+  late final String url = 'http://10.0.2.2:3000';
+
+  Future<dynamic> _signUp() async {
     String username = _usernameController.text;
     String password = _passwordController.text;
     String nickname = _nicknameController.text;
     String type = _gender;
     dynamic savedUserInfo;
-    print(username);
-    print(password);
-    print(nickname);
-    print(type);
+
+    const String url = 'http://10.0.2.2:8080/api/user';
+
     dynamic isSigned = await AuthManage().createUser(username, password);
-    isSigned
-        ? await fireStore.collection('users').doc().set({
+
+    if (isSigned == true) {
+      http.Response response = await http.post(Uri.parse(url),
+          headers: <String, String>{
+            'Content-Type': 'application/json',
+          },
+          body: jsonEncode({
             "id": username,
             "nickname": nickname,
             "password": password,
             "type": type,
-          })
-        : print('데이터 전달 불가능');
+          }));
 
-    Navigator.pushReplacementNamed(context, '/');
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/');
+    } else {
+      print('데이터 전달 불가능');
+    }
   }
 
   @override
@@ -126,8 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ElevatedButton(
                 child: Text('회원가입'),
                 onPressed: () {
-                  _signup();
-
+                  _signUp();
                   // 회원가입 버튼 동작 구현
                 },
               ),
