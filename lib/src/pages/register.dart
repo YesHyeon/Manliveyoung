@@ -43,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
             "type": type,
           }));
 
-      if (!mounted) return;
+      if (!mounted) return; // 페이지 이동을 위한 코드
       Navigator.pushReplacementNamed(context, '/');
     } else {
       print('데이터 전달 불가능');
@@ -132,7 +132,7 @@ class _RegisterPageState extends State<RegisterPage> {
               TextButton(
                 child: Text('피부타입 테스트하기'),
                 onPressed: () {
-                  Navigator.pushNamed(context, '/skinTypeTest');
+                  Navigator.pushNamed(context, '/skinTest');
                 },
               ),
               SizedBox(height: 24.0),
