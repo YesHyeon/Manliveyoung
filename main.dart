@@ -4,6 +4,7 @@ import 'package:manlivetoung/provider/myProvider.dart';
 import 'package:manlivetoung/src/auth.dart';
 import 'package:manlivetoung/src/pages/login.dart';
 import 'package:manlivetoung/src/pages/register.dart';
+import 'package:manlivetoung/src/pages/skinTest.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => LoginPage(),
         '/register': (context) => RegisterPage(),
+        '/skinTest': (context) => SkinTestPage(),
       },
     );
   }
