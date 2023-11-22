@@ -12,6 +12,7 @@ class AuthManage {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('보안을 위해 8자 이상의 패스워드를 입력해주세요.');
+
         return false;
       } else if (e.code == 'email-already-in-use') {
         print('이미 존재하는 이메일입니다.');

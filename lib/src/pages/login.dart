@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
           ? context.read<UserInfos>().addUserInfo(
               {'username': username, 'nickname': '홍길동', 'type': '건성'})
           : print('로그인 실패');
-      Navigator.pushReplacementNamed(context, '/main');
+      Navigator.pushReplacementNamed(context, '/recommend');
     }
 
     // isSigned
