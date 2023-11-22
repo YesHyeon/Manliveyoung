@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:manlivetoung/src/auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
@@ -27,9 +27,9 @@ class _RegisterPageState extends State<RegisterPage> {
     String type = _gender;
     dynamic savedUserInfo;
 
-    dynamic url = "http://10.0.2.2:8080/api/user";
+    dynamic url = dotenv.get("API_USER_ADDRESS");
 
-    dynamic testUrl = "http://10.0.2.2:8080/api2/건성cosmetic";
+    dynamic testUrl = dotenv.get("API_COSMETIC_ADDRESS");
 
     http.Response response2 = await http.post(Uri.parse(testUrl));
 
