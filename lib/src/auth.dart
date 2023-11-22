@@ -28,24 +28,24 @@ class AuthManage {
   // authPersistence(); // 인증 영속
 
   /// 로그인
-  Future<bool> signIn(String email, String pw) async {
+  Future<String> signIn(String email, String pw) async {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: pw);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-        return false;
+        print('잘못된 이메일입니다.');
+        return '잘못된 이메일입니다.';
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-        return false;
+        print('잘못된 비밀번호입니다.');
+        return '잘못된 비밀번호입니다.';
       }
     } catch (e) {
       print(e);
-      return false;
+      return 'false';
     }
     // authPersistence(); // 인증 영속
-    return true;
+    return '성공';
   }
 
   /// 로그아웃
