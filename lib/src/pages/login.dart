@@ -16,13 +16,35 @@ class _LoginPageState extends State<LoginPage> {
   void _login() async {
     String username = _usernameController.text;
     String password = _passwordController.text;
+
     dynamic isSigned = await AuthManage().signIn(username, password);
+
     if (context.mounted) {
-      isSigned
-          ? context.read<UserInfos>().addUserInfo(
-              {'username': username, 'nickname': '홍길동', 'type': '건성'})
-          : print('로그인 실패');
-      Navigator.pushReplacementNamed(context, '/recommend');
+      if (isSigned == '성공') {
+        context.read<UserInfos>().addUserInfo(
+            {'username': username, 'nickname': '홍길동', 'type': '건성'});
+        Navigator.pushReplacementNamed(context, '/recommend');
+      } else {
+        print('로그인 실패');
+        print(isSigned);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Alert'),
+              content: Text(isSigned),
+              actions: [
+                TextButton(
+                  child: Text('닫기'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
 
     // isSigned
