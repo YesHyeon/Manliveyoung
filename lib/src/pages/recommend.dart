@@ -843,7 +843,7 @@ class _RecommendPageState extends State<RecommendPage> {
                             )),
                         TextButton(
                           onPressed: () =>
-                              Navigator.pushNamed(context, '/skinTypeTest'),
+                              Navigator.pushNamed(context, '/skinTest'),
                           child: const Text('피부타입 테스트 다시하기'),
                         ),
                         TextButton(
