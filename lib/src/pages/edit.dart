@@ -1,108 +1,162 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:manlivetoung/src/auth.dart';
-import 'package:manlivetoung/provider/myProvider.dart';
-import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class LoginPage extends StatefulWidget {
+import 'package:provider/provider.dart';
+import 'package:manlivetoung/provider/myProvider.dart';
+
+class ProfileEditPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _ProfileEditPageState createState() => _ProfileEditPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ProfileEditPageState extends State<ProfileEditPage> {
+  late String _gender;
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _nicknameController = TextEditingController();
+  FirebaseFirestore fireStore = FirebaseFirestore.instance;
 
-  void _login() async {
-    String username = _usernameController.text;
-    String password = _passwordController.text;
+  void _edit() async {
+    String nickname = _nicknameController.text;
+    String type = _gender;
+    dynamic savedUserInfo;
 
-    dynamic isSigned = await AuthManage().signIn(username, password);
+    print(nickname);
+    print(type);
 
-    if (context.mounted) {
-      if (isSigned == '성공') {
-        context.read<UserInfos>().addUserInfo(
-            {'username': username, 'nickname': '홍길동', 'type': '건성'});
-        Navigator.pushReplacementNamed(context, '/recommend');
-      } else {
-        print('로그인 실패');
-        print(isSigned);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Alert'),
-              content: Text(isSigned),
-              actions: [
-                TextButton(
-                  child: Text('닫기'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      }
-    }
+    context
+        .read<UserInfos>()
+        .editUserInfo({'nickname': nickname, 'type': _gender});
 
-    // isSigned
-    //     ? Navigator.pushReplacementNamed(context, '/main')
-    //     : print('로그인 실패');
+    Navigator.pop(context);
   }
-
-  // _auth() {
-  //   // 사용자 인증정보 확인. 딜레이를 두어 확인
-  //   Future.delayed(const Duration(milliseconds: 100), () {
-  //     if (FirebaseAuth.instance.currentUser == null) {
-  //       print('로그인');
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
+    // _gender = context.watch<UserInfos>().type.toString();
+
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.all(25.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(
-              'assets/images/logo.png',
-              height: 130,
-              width: 450,
-            ),
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(
-                labelText: 'Email',
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: 'Password',
-              ),
-            ),
-            SizedBox(height: 24.0),
-            ElevatedButton(
-              child: Text('Login'),
-              onPressed: _login,
-            ),
-            SizedBox(height: 8.0),
-            TextButton(
-              child: Text('Register'),
-              onPressed: () async {
-                Navigator.pushNamed(context, '/register');
-              },
-            ),
-          ],
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text(
+            "프로필 수정",
+            style: TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 25),
+          ),
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
         ),
-      ),
-    );
+        body: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                    width: 350,
+                    margin: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 10),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 15, horizontal: 10),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Container(
+                              child: Image.asset("assets/images/profile.png"),
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 10)),
+                          Container(
+                            padding: const EdgeInsets.only(left: 0),
+                            child: Column(children: [
+                              Text(
+                                "닉네임: ${context.watch<UserInfos>().nickname.toString()}",
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                              Text(
+                                "아이디: ${context.watch<UserInfos>().id.toString()}",
+                                style: const TextStyle(fontSize: 15),
+                              ),
+                              Text(
+                                "피부타입: ${context.watch<UserInfos>().type.toString()}",
+                                style: const TextStyle(
+                                    fontFamily: 'Georgia', fontSize: 15),
+                              )
+                            ]),
+                          ),
+                        ]),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all(Radius.circular(15.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.7),
+                          spreadRadius: 0,
+                          blurRadius: 5.0,
+                          offset: Offset(0, 10), // changes position of shadow
+                        ),
+                      ],
+                    )),
+                Container(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        TextField(
+                          controller: _nicknameController,
+                          decoration: InputDecoration(
+                            labelText:
+                                'Current Nickname: ${context.watch<UserInfos>().nickname.toString()}',
+                          ),
+                        ),
+                        SizedBox(height: 16.0),
+                        Column(
+                          children: <Widget>[
+                            RadioListTile(
+                              title: Text('건성'),
+                              value: '건성',
+                              groupValue: _gender,
+                              onChanged: (value) {
+                                setState(() {
+                                  _gender = value!;
+                                });
+                              },
+                            ),
+                            RadioListTile(
+                              title: Text('복합성'),
+                              value: '복합성',
+                              groupValue: _gender,
+                              onChanged: (value) {
+                                setState(() {
+                                  _gender = value!;
+                                });
+                              },
+                            ),
+                            RadioListTile(
+                              title: Text('지성'),
+                              value: '지성',
+                              groupValue: _gender,
+                              onChanged: (value) {
+                                setState(() {
+                                  _gender = value!;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 24.0),
+                        ElevatedButton(
+                          child: Text('수정하기'),
+                          onPressed: () {
+                            _edit();
+
+                            // 회원가입 버튼 동작 구현
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ]),
+        ));
   }
 }
