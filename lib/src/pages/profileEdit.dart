@@ -22,9 +22,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     String type = _gender;
     dynamic savedUserInfo;
 
-    print(nickname);
-    print(type);
-
     context
         .read<UserInfos>()
         .editUserInfo({'nickname': nickname, 'type': _gender});
