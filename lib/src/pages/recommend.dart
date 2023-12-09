@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:provider/provider.dart';
 import 'package:manlivetoung/provider/myProvider.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:http/http.dart' as http;
 
 class RecommendPage extends StatefulWidget {
   const RecommendPage({super.key, required this.title});
@@ -55,27 +55,6 @@ class _RecommendPageState extends State<RecommendPage> {
   var serverResponse;
 
   setData() async {
-    final cosmetics = db.collection("cosmetics");
-
-    final a = ['건성cosmetics', '지성cosmetics', '복합성cosmetics'];
-
-    final data1 = <String, String>{
-      "image": "assets/images/skin1.jpg",
-      "name": "아쿠아6",
-      "comment": "자극적인 성분이 없어서 좋아요3",
-      "star": "4.6",
-      "review": "100",
-      "type": "skin"
-    };
-
-    // 전체데이터 초기화
-    // a.forEach((element) {
-    //   datas.forEach((k, v) => {
-    //         for (var i = 0; i < v.length; i++)
-    //           {db.collection(element).doc(v[i]['name']).set(v[i])}
-    //       });
-    // });
-
     datas.forEach((k, v) => {
           for (var i = 0; i < v.length; i++)
             {db.collection('건성cosmetics').doc(v[i]['name']).set(v[i])}
@@ -92,6 +71,7 @@ class _RecommendPageState extends State<RecommendPage> {
     // 서버에서 타입별로 제품 가져와서 객체 형식으로 저장하기.
     for (var i = 0; i < engcategory.length; i++) {
       dynamic item = [];
+      print(item);
       await db
           .collection("${type}cosmetics")
           .where("type", isEqualTo: engcategory[i])
@@ -112,6 +92,9 @@ class _RecommendPageState extends State<RecommendPage> {
         onError: (e) => print("Error completing: $e"),
       );
     }
+    print('----');
+    print(_cosmeticData);
+
     setState(() {
       _setLoading = false;
     });

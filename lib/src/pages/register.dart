@@ -33,8 +33,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
     http.Response response2 = await http.post(Uri.parse(testUrl));
 
-    // print(response2);
-
     dynamic isSigned = await AuthManage().createUser(username, password);
 
     if (isSigned == true) {
