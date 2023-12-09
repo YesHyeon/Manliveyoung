@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,7 @@ import 'dart:math';
 import 'package:provider/provider.dart';
 import 'package:manlivetoung/provider/myProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http;
 
 class RecommendPage extends StatefulWidget {
   const RecommendPage({super.key, required this.title});
@@ -51,7 +53,7 @@ class _RecommendPageState extends State<RecommendPage> {
   List<Map<String, String>> user = [];
   late int _currentPageIndex;
 
-  get http => null;
+  // get http => null;
   var serverResponse;
 
   setData() async {
@@ -64,34 +66,26 @@ class _RecommendPageState extends State<RecommendPage> {
   getData(type) async {
     _cosmeticData = {};
 
+    var url = Uri.parse('http://10.0.2.2:8080/cosmeticapi/cosmetic');
+    var response = await http.post(url,
+        headers: <String, String>{
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({"type": type}));
+
+    var abc = jsonDecode(response.body);
+
+    print('------');
+    print(response.body);
+
+    setState(() {
+      _cosmeticData = abc as dynamic;
+    });
+
     setState(() {
       _setLoading = true;
     });
 
-    // 서버에서 타입별로 제품 가져와서 객체 형식으로 저장하기.
-    for (var i = 0; i < engcategory.length; i++) {
-      dynamic item = [];
-      print(item);
-      await db
-          .collection("${type}cosmetics")
-          .where("type", isEqualTo: engcategory[i])
-          .get()
-          .then(
-        (querySnapshot) {
-          for (var docSnapshot in querySnapshot.docs) {
-            item.add(docSnapshot.data());
-          }
-
-          item.sort((a, b) => double.parse(b['star'].toString())
-              .compareTo(double.parse(a['star'].toString())));
-
-          setState(() {
-            _cosmeticData.addAll({'${engcategory[i]}': item});
-          });
-        },
-        onError: (e) => print("Error completing: $e"),
-      );
-    }
     print('----');
     print(_cosmeticData);
 
