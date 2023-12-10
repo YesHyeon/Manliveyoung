@@ -75,9 +75,6 @@ class _RecommendPageState extends State<RecommendPage> {
 
     var abc = jsonDecode(response.body);
 
-    print('------');
-    print(response.body);
-
     setState(() {
       _cosmeticData = abc as dynamic;
     });
@@ -85,9 +82,6 @@ class _RecommendPageState extends State<RecommendPage> {
     setState(() {
       _setLoading = true;
     });
-
-    print('----');
-    print(_cosmeticData);
 
     setState(() {
       _setLoading = false;
