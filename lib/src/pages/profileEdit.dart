@@ -145,8 +145,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                           child: Text('수정하기'),
                           onPressed: () {
                             _edit();
-
-                            // 회원가입 버튼 동작 구현
                           },
                         ),
                       ],

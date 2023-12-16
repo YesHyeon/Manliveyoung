@@ -46,20 +46,7 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     }
-
-    // isSigned
-    //     ? Navigator.pushReplacementNamed(context, '/main')
-    //     : print('로그인 실패');
   }
-
-  // _auth() {
-  //   // 사용자 인증정보 확인. 딜레이를 두어 확인
-  //   Future.delayed(const Duration(milliseconds: 100), () {
-  //     if (FirebaseAuth.instance.currentUser == null) {
-  //       print('로그인');
-  //     }
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
