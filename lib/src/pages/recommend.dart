@@ -9,6 +9,8 @@ import 'package:manlivetoung/provider/myProvider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 class RecommendPage extends StatefulWidget {
   const RecommendPage({super.key, required this.title});
 
@@ -66,17 +68,18 @@ class _RecommendPageState extends State<RecommendPage> {
   getData(type) async {
     _cosmeticData = {};
 
-    var url = Uri.parse('http://10.0.2.2:8080/cosmeticapi/cosmetic');
-    var response = await http.post(url,
+    dynamic url = dotenv.get("API_COSMETIC_ADDRESS");
+
+    var response = await http.post(Uri.parse(url),
         headers: <String, String>{
           'Content-Type': 'application/json',
         },
         body: jsonEncode({"type": type}));
 
-    var abc = jsonDecode(response.body);
+    var data = jsonDecode(response.body);
 
     setState(() {
-      _cosmeticData = abc as dynamic;
+      _cosmeticData = data as dynamic;
     });
 
     setState(() {
